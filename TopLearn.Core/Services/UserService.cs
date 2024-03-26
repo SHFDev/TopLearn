@@ -84,7 +84,7 @@ namespace TopLearn.Core.Services
                 UserName = user.UserName,
                 Email = user.Email,
                 RegisterDate = user.RegisterDate,
-                Wallet = 0,
+                Wallet = BalanceUserWallet(user.UserName),
             };
             return information;
         }
@@ -154,6 +154,20 @@ namespace TopLearn.Core.Services
             var User = GetUserByUserName(username);
             User.Password = PasswordHelper.EncodePasswordMd5(newPassword);
             UpdateUser(User);
+        }
+
+        public int BalanceUserWallet(string userName)
+        {
+            var Userid = GetUserIdByUserName(userName);
+            var Deposit = _context.wallets.Where(w => w.UserId == Userid && w.TypeId == 1).Select(w => w.Amount).ToList();
+            var withdraw = _context.wallets.Where(w => w.UserId == Userid && w.TypeId == 2).Select(w => w.Amount).ToList();
+            return (Deposit.Sum() - withdraw.Sum());
+        }
+
+        public int GetUserIdByUserName(string userName)
+        {
+            return _context.Users.Single(x=>x.UserName==userName).UserId;
+              
         }
     }
 }

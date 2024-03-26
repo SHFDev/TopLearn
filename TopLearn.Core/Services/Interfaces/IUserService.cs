@@ -17,6 +17,7 @@ namespace TopLearn.Core.Services.Interfaces
         User GetUserByUserName(string userName);
         void UpdateUser(User user);
         bool ActiveAccount(string activeCode);
+        int GetUserIdByUserName(string userName);
 
         #region UserPanel
         InformationUserViewModel GetUserInformation(string Username);
@@ -26,5 +27,13 @@ namespace TopLearn.Core.Services.Interfaces
         bool CompareOldPassword(string oldPassword, string username);
         void ChangeUserPassword(string username, string newPassword);
         #endregion
+
+        #region Wallet
+        int BalanceUserWallet(string userName);
+        
+        
+        #endregion
+
+
     }
 }
