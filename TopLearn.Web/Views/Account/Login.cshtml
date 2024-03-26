@@ -20,9 +20,15 @@
 
             <script>
                 // Your delay in milliseconds
-                var delay = 3000; 
+                var delay = 3000;
                 setTimeout(function () { window.location = "https://localhost:44349/UserPanel"; }, delay);
             </script>
+        }
+        @if (ViewBag.EditProfile == true)
+        {
+            <div class="alert alert-warning">
+                به دلیل ویرایش پروفایل و بارگذاری مجدد اطلاعات لطفا مجددا وارد شوید
+            </div>
         }
         <header><h2> ورود به سایت </h2></header>
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using TopLearn.Core.Convertors;
@@ -81,8 +82,8 @@ namespace TopLearn.Core.Services
             InformationUserViewModel information = new InformationUserViewModel()
             {
                 UserName = user.UserName,
-                Email=user.Email,
-                RegisterDate= user.RegisterDate,
+                Email = user.Email,
+                RegisterDate = user.RegisterDate,
                 Wallet = 0,
             };
             return information;
@@ -103,6 +104,56 @@ namespace TopLearn.Core.Services
                 RegisterDate = user.RegisterDate,
             };
             return sideBarView;
+        }
+
+        public EditProfileViewModel GetDataForEditProfileUser(string Username)
+        {
+            return _context.Users.Where(x => x.UserName == Username).Select(U => new EditProfileViewModel
+            {
+                AvatarName = U.UserAvatar,
+                UserName = U.UserName,
+                Email = U.Email,
+            }).SingleOrDefault();
+        }
+
+        public void EditProfile(string Userename, EditProfileViewModel editProfile)
+        {
+            if (editProfile.UserAvatar != null)
+            {
+                string imagepath = "";
+                if (editProfile.AvatarName != "Defult.jpg")
+                {
+                    imagepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/UserAvatar", editProfile.AvatarName);
+                    if (File.Exists(imagepath))
+                    {
+                        File.Delete(imagepath);
+                    }
+                }
+                editProfile.AvatarName = NameGenerator.GenerateUniqCode() + Path.GetExtension(editProfile.UserAvatar.FileName);
+                imagepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/UserAvatar", editProfile.AvatarName);
+                using (var stream = new FileStream(imagepath, FileMode.Create))
+                {
+                    editProfile.UserAvatar.CopyTo(stream);
+                }
+            }
+            var User = GetUserByUserName(Userename);
+            User.UserName = editProfile.UserName;
+            User.Email = editProfile.Email;
+            User.UserAvatar = editProfile.AvatarName;
+            UpdateUser(User);
+        }
+
+        public bool CompareOldPassword(string oldPassword, string username)
+        {
+            string HashOldPassword = PasswordHelper.EncodePasswordMd5(oldPassword);
+            return _context.Users.Any(u => u.UserName == username && u.Password == HashOldPassword);
+        }
+
+        public void ChangeUserPassword(string username, string newPassword)
+        {
+            var User = GetUserByUserName(username);
+            User.Password = PasswordHelper.EncodePasswordMd5(newPassword);
+            UpdateUser(User);
         }
     }
 }

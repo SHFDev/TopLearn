@@ -28,10 +28,6 @@ namespace TopLearn.Web.Controllers
             _viewRender = viewRender;
         }
 
-        
-
-     
-
         #region Register
 
         [Route("Register")]
@@ -90,8 +86,9 @@ namespace TopLearn.Web.Controllers
 
         #region Login
         [Route("Login")]
-        public ActionResult Login()
+        public ActionResult Login(bool EditProfile = false)
         {
+            ViewBag.EditProfile= EditProfile;
             return View();
         }
 
