@@ -14,7 +14,14 @@ namespace TopLearn.Core.Services.Interfaces
        User LoginUser(LoginViewModel login);
        User GetUserByEmail(string email);
        User GetUserByActiveCode(string activeCode);
+        User GetUserByUserName(string userName);
        void UpdateUser(User user);
        bool ActiveAccount(string activeCode);
-   }
+
+        #region UserPanel
+        InformationUserViewModel GetUserInformation(string Username);
+        SideBarViewModel GetSideBarUserPanelData(string userName);
+
+        #endregion
+    }
 }

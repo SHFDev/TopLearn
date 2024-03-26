@@ -12,7 +12,7 @@ using TopLearn.DataLayer.Entities.User;
 
 namespace TopLearn.Core.Services
 {
-    public class UserService:IUserService
+    public class UserService : IUserService
     {
         private TopLearnContext _context;
 
@@ -73,6 +73,36 @@ namespace TopLearn.Core.Services
             _context.SaveChanges();
 
             return true;
+        }
+
+        public InformationUserViewModel GetUserInformation(string Username)
+        {
+            var user = GetUserByUserName(Username);
+            InformationUserViewModel information = new InformationUserViewModel()
+            {
+                UserName = user.UserName,
+                Email=user.Email,
+                RegisterDate= user.RegisterDate,
+                Wallet = 0,
+            };
+            return information;
+        }
+
+        public User GetUserByUserName(string userName)
+        {
+            return _context.Users.SingleOrDefault(x => x.UserName == userName);
+        }
+
+        public SideBarViewModel GetSideBarUserPanelData(string userName)
+        {
+            var user = GetUserByUserName(userName);
+            SideBarViewModel sideBarView = new SideBarViewModel()
+            {
+                UserName = user.UserName,
+                ImageName = user.UserAvatar,
+                RegisterDate = user.RegisterDate,
+            };
+            return sideBarView;
         }
     }
 }

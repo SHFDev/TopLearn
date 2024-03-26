@@ -77,7 +77,16 @@ namespace TopLearn.Web
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseMvcWithDefaultRoute();
-            
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "areas",
+                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+
+                );
+                routes.MapRoute("Default", "{controller=Home}/{action=Index}/{id?}");
+            });
+
 
             app.Run(async (context) =>
             {
