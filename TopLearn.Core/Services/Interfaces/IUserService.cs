@@ -28,6 +28,12 @@ namespace TopLearn.Core.Services.Interfaces
         bool CompareOldPassword(string oldPassword, string username);
         void ChangeUserPassword(string username, string newPassword);
         #endregion
+       
+        
+        #region AdminPanle
+        UserForAdminViewModel GetUsers(int pageid=1,string filterEmail= "",string filterUserName= "");
+        int AddUserFromAdmin(CreateUserViewModel user);
+        #endregion
 
         #region Wallet
         int BalanceUserWallet(string userName);

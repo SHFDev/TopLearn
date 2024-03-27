@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TopLearn.Core.DTOs;
 using TopLearn.Core.Services.Interfaces;
+using TopLearn.Core.DTOs;
 
 namespace TopLearn.Web.Areas.UserPanel.Controllers
 {

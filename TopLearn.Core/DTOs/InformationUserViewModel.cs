@@ -12,13 +12,13 @@ namespace TopLearn.Core.DTOs
         public string Email { get; set; }
         public DateTime RegisterDate { get; set; }
         public int Wallet { get; set; }
-    }  
-    
+    }
+
     public class SideBarViewModel
     {
         public string UserName { get; set; }
         public DateTime RegisterDate { get; set; }
-        public string  ImageName { get; set; }
+        public string ImageName { get; set; }
     }
 
     public class EditProfileViewModel

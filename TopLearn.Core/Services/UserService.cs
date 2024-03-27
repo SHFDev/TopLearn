@@ -216,5 +216,54 @@ namespace TopLearn.Core.Services
         {
             _context.wallets.Update(wallet);
         }
+
+        public UserForAdminViewModel GetUsers(int pageid = 1, string filterEmail = "", string filterUserName = "")
+        {
+            IQueryable<User> result = _context.Users;
+
+            if (!string.IsNullOrEmpty(filterEmail))
+            {
+                result = result.Where(u => u.Email.Contains(filterEmail));
+            }
+            if (!string.IsNullOrEmpty(filterUserName))
+            {
+                result = result.Where(u => u.UserName.Contains(filterUserName));
+            }
+            //show item in page
+            //int Take = 20;        
+            int Take = 20;
+            int skip = (pageid - 1) * Take;
+            UserForAdminViewModel List = new UserForAdminViewModel();
+            List.CurrentPage = pageid;
+            List.PageCount = result.Count() / Take;
+            List.Users = result.OrderBy(o => o.RegisterDate).Skip(skip).Take(Take).ToList();
+
+            return List;
+
+        }
+
+        public int AddUserFromAdmin(CreateUserViewModel user)
+        {
+            var User = new User();
+            User.Password = PasswordHelper.EncodePasswordMd5(user.Password);
+            User.Email = user.Email;
+            User.UserName = user.UserName;
+            User.ActiveCode = NameGenerator.GenerateUniqCode();
+            User.IsActive = true;
+            User.RegisterDate = DateTime.Now;
+            #region save avatar
+            if (user.UserAvatar != null)
+            {
+                string imagepath = "";
+                User.UserAvatar = NameGenerator.GenerateUniqCode() + Path.GetExtension(user.UserAvatar.FileName);
+                imagepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/UserAvatar", User.UserAvatar);
+                using (var stream = new FileStream(imagepath, FileMode.Create))
+                {
+                    user.UserAvatar.CopyTo(stream);
+                }
+            }
+            #endregion
+            return AddUser(User);
+        }
     }
 }

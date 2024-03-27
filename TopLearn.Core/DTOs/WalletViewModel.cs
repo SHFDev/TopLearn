@@ -7,7 +7,7 @@ namespace TopLearn.Core.DTOs
 {
     public class ChargeWalletViewModel
     {
-        [Required(ErrorMessage ="لطفا {0} را وارد کنید ")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید ")]
         [Display(Name = "مبلغ")]
         public int Amount { get; set; }
     }
@@ -15,8 +15,8 @@ namespace TopLearn.Core.DTOs
     {
         public int Amount { get; set; }
         public int Type { get; set; }
-        public string  Description { get; set; }
+        public string Description { get; set; }
         public DateTime DateTime { get; set; }
     }
-         
+
 }
