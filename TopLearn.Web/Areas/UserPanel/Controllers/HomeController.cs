@@ -78,6 +78,8 @@ namespace TopLearn.Web.Areas.UserPanel.Controllers
 
             return Redirect("/Logout");
         }
-        #endregion 
+        #endregion
+
+
     }
 }

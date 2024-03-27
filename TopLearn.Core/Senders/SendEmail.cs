@@ -22,7 +22,7 @@ namespace TopLearn.Core.Senders
             // mail.Attachments.Add(attachment);
 
             SmtpServer.Port = 587;
-            SmtpServer.Credentials = new System.Net.NetworkCredential("sepehrhashemi.f2024@gmail.com", "@Saba1011");
+            SmtpServer.Credentials = new System.Net.NetworkCredential("sepehrhashemi.f2024@gmail.com", "*******");
             SmtpServer.EnableSsl = true;
             SmtpServer.Send(mail);
 

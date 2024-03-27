@@ -34,11 +34,18 @@ namespace TopLearn.Web.Areas.UserPanel.Controllers
                 ViewBag.ListWallet = _userService.GetUserWallets(User.Identity.Name);
                 return View(charge);
             }
-            _userService.chargeWallet(User.Identity.Name, charge.Amount, "شارژ حساب ");
+            int walletid = _userService.chargeWallet(User.Identity.Name, charge.Amount, "شارژ حساب ");
 
-
-            //TODO Online Payment
-
+            #region Online Payment
+            var Payment = new ZarinpalSandbox.Payment(charge.Amount);
+            var respons = Payment.PaymentRequest("شارژ کیف پول ", "https://localhost:44349/OnlinePayment"+ walletid);
+            if (respons.Result.Status==100)
+            {  
+              return Redirect("https://sandbox.zarinpal.com/pg/StartPay" + respons.Result.Authority);
+            }
+            
+            #endregion
+            //TODO 
 
             return null;
         }

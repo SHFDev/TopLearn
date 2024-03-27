@@ -162,7 +162,7 @@ namespace TopLearn.Core.Services
             var Userid = GetUserIdByUserName(userName);
             var Deposit = _context.wallets.Where(w => w.UserId == Userid && w.TypeId == 1 && w.IsPay).Select(w => w.Amount).ToList();
             var withdraw = _context.wallets.Where(w => w.UserId == Userid && w.TypeId == 2 && w.IsPay).Select(w => w.Amount).ToList();
-      
+
             return (Deposit.Sum() - withdraw.Sum());
         }
 
@@ -175,35 +175,46 @@ namespace TopLearn.Core.Services
         public List<WalletViewModel> GetUserWallets(string userName)
         {
             int userId = GetUserIdByUserName(userName);
-            return _context.wallets.Where(w => w.UserId == userId && w.IsPay).Select(x=> new WalletViewModel
+            return _context.wallets.Where(w => w.UserId == userId && w.IsPay).Select(x => new WalletViewModel
             {
                 Amount = x.Amount,
-                DateTime=x.CreateDate,
+                DateTime = x.CreateDate,
                 Description = x.Description,
-                Type=x.TypeId
+                Type = x.TypeId
             }).ToList();
         }
 
-        public void chargeWallet(string username, int Amount, string Description, bool IsPay = false)
+        public int chargeWallet(string username, int Amount, string Description, bool IsPay = false)
         {
-            var userid= GetUserIdByUserName(username);
+            var userid = GetUserIdByUserName(username);
             Wallet wallet = new Wallet()
             {
-                Amount=Amount,
-                CreateDate= DateTime.Now,
+                Amount = Amount,
+                CreateDate = DateTime.Now,
                 Description = Description,
                 IsPay = IsPay,
-                TypeId=1,
+                TypeId = 1,
                 UserId = userid,
             };
 
-            AddWallet(wallet);
+            return AddWallet(wallet);
         }
 
-        public void AddWallet(Wallet wallet)
+        public int AddWallet(Wallet wallet)
         {
             _context.wallets.Add(wallet);
             _context.SaveChanges();
+            return wallet.WalletId;
+        }
+
+        public Wallet GetWalletByWalletId(int walletId)
+        {
+            return _context.wallets.Find(walletId);
+        }
+
+        public void UpdateWallet(Wallet wallet)
+        {
+            _context.wallets.Update(wallet);
         }
     }
 }

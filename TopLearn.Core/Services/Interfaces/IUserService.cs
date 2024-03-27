@@ -32,8 +32,10 @@ namespace TopLearn.Core.Services.Interfaces
         #region Wallet
         int BalanceUserWallet(string userName);
         List<WalletViewModel> GetUserWallets(string userName);
-        void chargeWallet(string username, int Amount,string Description, bool IsPay = false);
-        void AddWallet(Wallet wallet);
+        int chargeWallet(string username, int Amount,string Description, bool IsPay = false);
+        int AddWallet(Wallet wallet);
+        Wallet GetWalletByWalletId(int walletId);
+        void UpdateWallet(Wallet wallet);
         
         #endregion
 
