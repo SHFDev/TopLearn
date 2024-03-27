@@ -10,6 +10,7 @@ using TopLearn.Core.Security;
 using TopLearn.Core.Services.Interfaces;
 using TopLearn.DataLayer.Context;
 using TopLearn.DataLayer.Entities.User;
+using TopLearn.DataLayer.Entities.Wallet;
 
 namespace TopLearn.Core.Services
 {
@@ -159,15 +160,50 @@ namespace TopLearn.Core.Services
         public int BalanceUserWallet(string userName)
         {
             var Userid = GetUserIdByUserName(userName);
-            var Deposit = _context.wallets.Where(w => w.UserId == Userid && w.TypeId == 1).Select(w => w.Amount).ToList();
-            var withdraw = _context.wallets.Where(w => w.UserId == Userid && w.TypeId == 2).Select(w => w.Amount).ToList();
+            var Deposit = _context.wallets.Where(w => w.UserId == Userid && w.TypeId == 1 && w.IsPay).Select(w => w.Amount).ToList();
+            var withdraw = _context.wallets.Where(w => w.UserId == Userid && w.TypeId == 2 && w.IsPay).Select(w => w.Amount).ToList();
+      
             return (Deposit.Sum() - withdraw.Sum());
         }
 
         public int GetUserIdByUserName(string userName)
         {
-            return _context.Users.Single(x=>x.UserName==userName).UserId;
-              
+            return _context.Users.Single(x => x.UserName == userName).UserId;
+
+        }
+
+        public List<WalletViewModel> GetUserWallets(string userName)
+        {
+            int userId = GetUserIdByUserName(userName);
+            return _context.wallets.Where(w => w.UserId == userId && w.IsPay).Select(x=> new WalletViewModel
+            {
+                Amount = x.Amount,
+                DateTime=x.CreateDate,
+                Description = x.Description,
+                Type=x.TypeId
+            }).ToList();
+        }
+
+        public void chargeWallet(string username, int Amount, string Description, bool IsPay = false)
+        {
+            var userid= GetUserIdByUserName(username);
+            Wallet wallet = new Wallet()
+            {
+                Amount=Amount,
+                CreateDate= DateTime.Now,
+                Description = Description,
+                IsPay = IsPay,
+                TypeId=1,
+                UserId = userid,
+            };
+
+            AddWallet(wallet);
+        }
+
+        public void AddWallet(Wallet wallet)
+        {
+            _context.wallets.Add(wallet);
+            _context.SaveChanges();
         }
     }
 }

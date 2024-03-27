@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using TopLearn.Core.DTOs;
 using TopLearn.DataLayer.Entities.User;
+using TopLearn.DataLayer.Entities.Wallet;
 
 namespace TopLearn.Core.Services.Interfaces
 {
@@ -30,7 +31,9 @@ namespace TopLearn.Core.Services.Interfaces
 
         #region Wallet
         int BalanceUserWallet(string userName);
-        
+        List<WalletViewModel> GetUserWallets(string userName);
+        void chargeWallet(string username, int Amount,string Description, bool IsPay = false);
+        void AddWallet(Wallet wallet);
         
         #endregion
 
