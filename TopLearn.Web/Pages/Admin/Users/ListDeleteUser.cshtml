@@ -1,6 +1,6 @@
 ﻿@page
 @using TopLearn.Core.Convertors
-@model TopLearn.Web.Pages.Admin.Users.IndexModel
+@model TopLearn.Web.Pages.Admin.Users.ListDeleteUser
 @{
     ViewData["Title"] = "Index";
 }
@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="col-sm-2 col-md-2">
                                     <button type="submit" class="btn btn-info">بگرد</button>
-                                    <a class="btn btn-default btn-sm" href="/Admin/Users">خالی</a>
+                                    <a class="btn btn-default btn-sm" href="/Admin/Users/ListDeleteUser">خالی</a>
                                 </div>
                             </form>
                         </div>
@@ -72,7 +72,7 @@
                                             <a href="Users/EditUser/@user.UserId" class="btn btn-warning btn-sm">
                                                 ویرایش
                                             </a>
-                                            <a href="Users/DeleteUser/@user.UserId" class="btn btn-danger btn-sm">
+                                            <a href="#" class="btn btn-danger btn-sm">
                                                 حذف
                                             </a>
                                         </td>

@@ -17,23 +17,57 @@ namespace TopLearn.Core.Services
             _context = context;
         }
 
+        public int AddRole(Role role)
+        {
+            _context.Roles.Add(role);
+            _context.SaveChanges();
+            return role.RoleId;
+        }
+
         public void AddRolesToUser(List<int> roleIds, int userId)
         {
             foreach (var role in roleIds)
             {
                 _context.UserRoles.Add(new UserRole()
                 {
-                    RoleId=role,
-                    UserId=userId
+                    RoleId = role,
+                    UserId = userId
                 });
 
             }
             _context.SaveChanges();
         }
 
+        public void DeleteRole(Role role)
+        {
+            role.IsDelete = true;
+            UpdateRole(role);
+        }
+
+        public void EditRolesUser(int userId, List<int> roleIds)
+        {
+            //Delete All UserRole
+            _context.UserRoles.Where(r => r.UserId == userId).ToList().ForEach(r => _context.UserRoles.Remove(r));
+
+            AddRolesToUser(roleIds, userId);
+
+
+        }
+
+        public Role GetRoleById(int RoleId)
+        {
+           return  _context.Roles.Find(RoleId);
+        }
+
         public List<Role> GetRoles()
         {
             return _context.Roles.ToList();
+        }
+
+        public void UpdateRole(Role role)
+        {
+            _context.Roles.Update(role);
+            _context.SaveChanges();
         }
     }
 }

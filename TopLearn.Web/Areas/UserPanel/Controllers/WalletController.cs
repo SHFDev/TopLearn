@@ -41,7 +41,7 @@ namespace TopLearn.Web.Areas.UserPanel.Controllers
             var respons = Payment.PaymentRequest("شارژ کیف پول ", "https://localhost:44349/OnlinePayment"+ walletid);
             if (respons.Result.Status==100)
             {  
-              return Redirect("https://sandbox.zarinpal.com/pg/StartPay" + respons.Result.Authority);
+              return Redirect("https://sandbox.zarinpal.com/pg/StartPay/" + respons.Result.Authority);
             }
             
             #endregion

@@ -30,7 +30,11 @@ namespace TopLearn.DataLayer.Context
         public DbSet<Wallet> wallets { get; set; }
 
         #endregion
-
-
-    }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>().HasQueryFilter(x => !x.IsDelete);
+            modelBuilder.Entity<Role>().HasQueryFilter(x => !x.IsDelete);
+            base.OnModelCreating(modelBuilder);
+        }
+    }  
 }

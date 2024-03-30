@@ -14,14 +14,18 @@ namespace TopLearn.Core.Services.Interfaces
         int AddUser(User user);
         User LoginUser(LoginViewModel login);
         User GetUserByEmail(string email);
+        User GetUserByUserId(int userId);
         User GetUserByActiveCode(string activeCode);
         User GetUserByUserName(string userName);
         void UpdateUser(User user);
         bool ActiveAccount(string activeCode);
         int GetUserIdByUserName(string userName);
+        void DeleteUser(int userid);
+        
 
         #region UserPanel
         InformationUserViewModel GetUserInformation(string Username);
+        InformationUserViewModel GetUserInformation(int UserId);
         SideBarViewModel GetSideBarUserPanelData(string userName);
         EditProfileViewModel GetDataForEditProfileUser(string Username);
         void EditProfile(string Userename, EditProfileViewModel editProfile);
@@ -32,7 +36,14 @@ namespace TopLearn.Core.Services.Interfaces
         
         #region AdminPanle
         UserForAdminViewModel GetUsers(int pageid=1,string filterEmail= "",string filterUserName= "");
+        UserForAdminViewModel GetDeletedUsers(int pageid=1,string filterEmail= "",string filterUserName= "");
         int AddUserFromAdmin(CreateUserViewModel user);
+
+        EditUserViewModel GetUserForShowInEditMode(int userId);
+
+        void EditUserUserFromAdmin(EditUserViewModel editUser);
+
+
         #endregion
 
         #region Wallet

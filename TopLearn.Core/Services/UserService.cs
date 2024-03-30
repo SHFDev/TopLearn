@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -80,6 +81,18 @@ namespace TopLearn.Core.Services
         public InformationUserViewModel GetUserInformation(string Username)
         {
             var user = GetUserByUserName(Username);
+            InformationUserViewModel information = new InformationUserViewModel()
+            {
+                UserName = user.UserName,
+                Email = user.Email,
+                RegisterDate = user.RegisterDate,
+                Wallet = BalanceUserWallet(user.UserName),
+            };
+            return information;
+        }
+        public InformationUserViewModel GetUserInformation(int UserId)
+        {
+            var user = GetUserByUserId(UserId);
             InformationUserViewModel information = new InformationUserViewModel()
             {
                 UserName = user.UserName,
@@ -236,6 +249,7 @@ namespace TopLearn.Core.Services
             UserForAdminViewModel List = new UserForAdminViewModel();
             List.CurrentPage = pageid;
             List.PageCount = result.Count() / Take;
+
             List.Users = result.OrderBy(o => o.RegisterDate).Skip(skip).Take(Take).ToList();
 
             return List;
@@ -264,6 +278,93 @@ namespace TopLearn.Core.Services
             }
             #endregion
             return AddUser(User);
+        }
+
+        public EditUserViewModel GetUserForShowInEditMode(int userId)
+        {
+
+            return _context.Users.Where(u => u.UserId == userId)
+                .Select(u => new EditUserViewModel
+                {
+                    UserId = u.UserId,
+                    AvatarName = u.UserAvatar,
+                    Email = u.Email,
+                    UserName = u.UserName,
+                    UserRoles = u.UserRoles.Select(r => r.RoleId).ToList(),
+
+                }).Single();
+
+        }
+
+        public void EditUserUserFromAdmin(EditUserViewModel editUser)
+        {
+            var user = GetUserByUserId(editUser.UserId);
+            user.Email = editUser.Email;
+            if (!string.IsNullOrEmpty(editUser.Password))
+            {
+                user.Password = PasswordHelper.EncodePasswordMd5(editUser.Password);
+            }
+            if (editUser.UserAvatar != null)
+            {
+                if (editUser.AvatarName != "Defult.jpg")
+                {
+                    var deletePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/UserAvatar", editUser.AvatarName);
+                    if (File.Exists(deletePath))
+                    {
+                        File.Delete(deletePath);
+                    }
+                }
+                #region save avatar
+                if (user.UserAvatar != null)
+                {
+                    string imagepath = "";
+                    user.UserAvatar = NameGenerator.GenerateUniqCode() + Path.GetExtension(editUser.UserAvatar.FileName);
+                    imagepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/UserAvatar", user.UserAvatar);
+                    using (var stream = new FileStream(imagepath, FileMode.Create))
+                    {
+                        editUser.UserAvatar.CopyTo(stream);
+                    }
+                }
+                #endregion
+            }
+            _context.Users.Update(user);
+            _context.SaveChanges();
+
+        }
+
+        public User GetUserByUserId(int userId)
+        {
+            return _context.Users.SingleOrDefault(x => x.UserId == userId);
+        }
+
+        public UserForAdminViewModel GetDeletedUsers(int pageid = 1, string filterEmail = "", string filterUserName = "")
+        {
+            IQueryable<User> result = _context.Users.IgnoreQueryFilters().Where(x=>x.IsDelete);
+
+            if (!string.IsNullOrEmpty(filterEmail))
+            {
+                result = result.Where(u => u.Email.Contains(filterEmail));
+            }
+            if (!string.IsNullOrEmpty(filterUserName))
+            {
+                result = result.Where(u => u.UserName.Contains(filterUserName));
+            }
+            int Take = 20;
+            int skip = (pageid - 1) * Take;
+            UserForAdminViewModel List = new UserForAdminViewModel();
+            List.CurrentPage = pageid;
+            List.PageCount = result.Count() / Take;
+
+            List.Users = result.OrderBy(o => o.RegisterDate).Skip(skip).Take(Take).ToList();
+
+            return List;
+        }
+
+        public void DeleteUser(int userid)
+        {
+            var user = GetUserByUserId(userid);
+            user.IsDelete = true;
+            UpdateUser(user);
         }
     }
 }
