@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TopLearn.DataLayer.Context;
 
 namespace TopLearn.DataLayer.Migrations
 {
     [DbContext(typeof(TopLearnContext))]
-    partial class TopLearnContextModelSnapshot : ModelSnapshot
+    [Migration("20240402100937_mig_permission")]
+    partial class mig_permission
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,7 +37,7 @@ namespace TopLearn.DataLayer.Migrations
 
                     b.HasIndex("ParentID");
 
-                    b.ToTable("permission");
+                    b.ToTable("Permission");
                 });
 
             modelBuilder.Entity("TopLearn.DataLayer.Entities.Permissions.RolePermission", b =>
@@ -54,7 +56,7 @@ namespace TopLearn.DataLayer.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("rolepermission");
+                    b.ToTable("RolePermission");
                 });
 
             modelBuilder.Entity("TopLearn.DataLayer.Entities.User.Role", b =>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using TopLearn.DataLayer.Entities.Permissions;
 using TopLearn.DataLayer.Entities.User;
 using TopLearn.DataLayer.Entities.Wallet;
 
@@ -28,6 +29,14 @@ namespace TopLearn.DataLayer.Context
         #region Wallet
         public DbSet<WalletType> walletTypes { get; set; }
         public DbSet<Wallet> wallets { get; set; }
+
+        #endregion
+
+
+        #region permission 
+        public DbSet<Permission> permission { get; set; }
+        public DbSet<RolePermission> rolepermission { get; set; }
+
 
         #endregion
         protected override void OnModelCreating(ModelBuilder modelBuilder)

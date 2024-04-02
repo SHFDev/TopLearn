@@ -1,13 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using System.Collections.Generic;
 using System.Security;
+using TopLearn.Core.Security;
 using TopLearn.Core.Services;
 using TopLearn.Core.Services.Interfaces;
 using TopLearn.DataLayer.Entities.User;
 
 namespace TopLearn.Web.Pages.Admin.Roles
 {
+    [Permissionchecker(7)]
     public class CreateRoleModel : PageModel
     {
         IPermissionService _permissionService;
@@ -18,18 +21,24 @@ namespace TopLearn.Web.Pages.Admin.Roles
 
 
         [BindProperty]
-        public Role  Role { get; set; }
+        public Role Role { get; set; }
         public void OnGet()
         {
+            ViewData["Permissions"] = _permissionService.GetAllPermission();
+
+
         }
-        public IActionResult OnPost()
+
+        public IActionResult OnPost(List<int> selectedpermission)
         {
-            if (!ModelState.IsValid) 
+            if (!ModelState.IsValid)
             {
                 return Page();
             }
             Role.IsDelete = false;
-            int roleId=_permissionService.AddRole(Role);
+            int roleId = _permissionService.AddRole(Role);
+
+            _permissionService.AddPermissionsToRole(roleId, selectedpermission);
             //ToDO add permission
 
             return RedirectToPage("Index");
