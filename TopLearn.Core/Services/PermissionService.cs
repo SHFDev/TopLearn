@@ -57,11 +57,14 @@ namespace TopLearn.Core.Services
         {
             List<int> userRoles = UserRoles(userName);
             if (!userRoles.Any())
-                return false;
+            {
+             return false;
+            }
+                
 
             List<int> rolePermission = _context.rolepermission
                 .Where(x => x.PermissionId == permissionId)
-                .Select(x => x.Rp_Id).ToList(); ;
+                .Select(x => x.RoleId).ToList();
 
             var check = userRoles.Equals(permissionId);
 
