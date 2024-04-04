@@ -44,6 +44,8 @@ namespace TopLearn.DataLayer.Migrations
 
                     b.Property<int>("GroupId");
 
+                    b.Property<bool>("IsDeleted");
+
                     b.Property<int>("LevelId");
 
                     b.Property<int>("StatusId");
@@ -139,7 +141,7 @@ namespace TopLearn.DataLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Status")
+                    b.Property<string>("StatusTitle")
                         .IsRequired()
                         .HasMaxLength(150);
 
@@ -311,7 +313,7 @@ namespace TopLearn.DataLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("TopLearn.DataLayer.Entities.Course.CourseStatus", "CourseStatus")
-                        .WithMany()
+                        .WithMany("Courses")
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade);
 

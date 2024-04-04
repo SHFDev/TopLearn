@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -53,6 +53,8 @@ namespace TopLearn.DataLayer.Entities.Course
         public DateTime CreateDate { get; set; }
 
         public DateTime? UpdateDate { get; set; }
+
+        public bool IsDeleted { get; set; }
 
 
         #region Relations

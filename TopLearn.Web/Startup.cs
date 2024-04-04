@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +31,14 @@ namespace TopLearn.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            //services.Configure<FormOptions>(option =>
+            //{
+            //    option.MultipartBodyLengthLimit = 6000000;//برای تنظیم مقدار حجمی که کاربر میخواهد اپلود کند  (برای سیستم عامل های دیگر)
+            //});
+
+
+
+
 
             #region Authentication
 

@@ -59,6 +59,7 @@ namespace TopLearn.DataLayer.Context
             modelBuilder.Entity<User>().HasQueryFilter(x => !x.IsDelete);
             modelBuilder.Entity<Role>().HasQueryFilter(x => !x.IsDelete);
             modelBuilder.Entity<CourseGroup>().HasQueryFilter(G => !G.IsDelete);
+            modelBuilder.Entity<Course>().HasQueryFilter(G => !G.IsDeleted);
             base.OnModelCreating(modelBuilder);
         }
 

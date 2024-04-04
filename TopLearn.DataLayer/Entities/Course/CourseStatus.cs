@@ -13,7 +13,8 @@ namespace TopLearn.DataLayer.Entities.Course
         
         [MaxLength(150, ErrorMessage = "{0}نمیتواند بیشتر از {1} کاراکتر باشد")]
         [Required(ErrorMessage = "لطفا {} را وارد کنید ")]
-        public string Status { get; set; }
+        public string StatusTitle { get; set; }
+        public List<Course> Courses { get; set; }
 
     }
 }
