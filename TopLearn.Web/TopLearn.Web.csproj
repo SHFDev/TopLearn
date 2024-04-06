@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Pages\Admin\Courses\IndexEpisode.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Pages\Admin\Courses\IndexEpisode.cshtml" />
     <None Include="wwwroot\css\fonts\Material-Design-Iconic-Font.svg" />
     <None Include="wwwroot\css\fonts\Material-Design-Iconic-Font.woff2" />
     <None Include="wwwroot\js\bootstrap.min.js" />
@@ -36,6 +41,15 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\course\demoes\" />
+    <Folder Include="wwwroot\coursefile\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Admin\Courses\IndexEpisode.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Admin\Courses\IndexEpisode.cshtml" />
   </ItemGroup>
 
 </Project>

@@ -29,5 +29,16 @@ namespace TopLearn.Core.Services.Interfaces
         void UpdateCourse(Course course, IFormFile imgCourse, IFormFile demo);
         #endregion
 
+
+
+        #region Episode
+         int AddEpisode(CourseEpisode episode,IFormFile fileEpisode);
+        bool CheckExistFile(string fileName);
+        List<CourseEpisode> GetListEpisodeCourse(int  courseId);
+
+        CourseEpisode GetEpisodeById(int episodeId);
+        void EditEpisode(CourseEpisode episode, IFormFile episodeFile);
+        #endregion
+
     }
 }

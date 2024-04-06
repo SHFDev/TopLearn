@@ -64,6 +64,29 @@ namespace TopLearn.Core.Services
             return course.CourseId;
         }
 
+        public int AddEpisode(CourseEpisode episode, IFormFile fileEpisode)
+        {
+            episode.EpisodeFileName = fileEpisode.FileName;
+
+
+            string FilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/coursefile", episode.EpisodeFileName);
+            using (var stream = new FileStream(FilePath, FileMode.Create))
+            {
+                fileEpisode.CopyTo(stream);
+            }
+
+
+            _context.CourseEpisodes.Add(episode);
+            _context.SaveChanges();
+            return episode.EpisodeId;
+        }
+
+        public bool CheckExistFile(string fileName)
+        {
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/coursefile", fileName);
+            return File.Exists(path);
+        }
+
         public List<CourseGroup> GetAllGroup()
         {
             return _context.courseGroups.ToList();
@@ -104,6 +127,11 @@ namespace TopLearn.Core.Services
             }).ToList();
         }
 
+        public List<CourseEpisode> GetListEpisodeCourse(int courseId)
+        {
+            return _context.CourseEpisodes.Where(c => c.CourseId == courseId).ToList();
+        }
+
         public List<SelectListItem> GetStatues()
         {
             return _context.CourseStatuses.Select(s => new SelectListItem()
@@ -132,7 +160,7 @@ namespace TopLearn.Core.Services
                 }).ToList();
         }
 
-        public void UpdateCourse(Course course,IFormFile imgCourse, IFormFile demo)
+        public void UpdateCourse(Course course, IFormFile imgCourse, IFormFile demo)
         {
             course.CreateDate = DateTime.Now;
             //TOdoCheck image
@@ -144,7 +172,7 @@ namespace TopLearn.Core.Services
                     if (File.Exists(deleteimagePath))
                     {
                         File.Delete(deleteimagePath);
-                    } 
+                    }
                     var deletethumbPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/course/thumb", course.CourseImageName);
                     if (File.Exists(deletethumbPath))
                     {
@@ -186,6 +214,31 @@ namespace TopLearn.Core.Services
             }
             _context.Update(course);
             _context.SaveChanges();
+        }
+
+        public CourseEpisode GetEpisodeById(int episodeId)
+        {
+            return _context.CourseEpisodes.Find(episodeId);
+        }
+
+        public void EditEpisode(CourseEpisode episode, IFormFile episodeFile)
+        {
+            if (episodeFile != null)
+            {
+                string deleteFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/courseFiles", episode.EpisodeFileName);
+                File.Delete(deleteFilePath);
+
+                episode.EpisodeFileName = episodeFile.FileName;
+                string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/courseFiles", episode.EpisodeFileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    episodeFile.CopyTo(stream);
+                }
+            }
+
+            _context.CourseEpisodes.Update(episode);
+            _context.SaveChanges();
+
         }
     }
 }
