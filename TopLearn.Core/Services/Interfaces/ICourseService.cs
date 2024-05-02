@@ -27,6 +27,7 @@ namespace TopLearn.Core.Services.Interfaces
         int AddCourse(Course course ,IFormFile imgCourse ,IFormFile CourseDemo);
         Course GetCourseById(int courseId);
         void UpdateCourse(Course course, IFormFile imgCourse, IFormFile demo);
+        List<ShowCourseListViewModel> GetCourse(int pageId=1,string filter ="" ,string gettype="all",string  orderByType="Date",int startpric=0,int endpric=0,List<int> selecteedgroup=null, int Tack = 0);
         #endregion
 
 

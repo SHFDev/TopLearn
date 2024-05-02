@@ -21,7 +21,11 @@ namespace TopLearn.Web.Controllers
             _UserService = UserService;
             _CourseService = courseService;
         }
-        public IActionResult Index() => View();
+        public IActionResult Index()
+        {
+           
+           return View(_CourseService.GetCourse());
+        }
 
 
         [Route("OnlinePayment/{id}")]

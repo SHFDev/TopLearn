@@ -240,5 +240,72 @@ namespace TopLearn.Core.Services
             _context.SaveChanges();
 
         }
+
+        public List<ShowCourseListViewModel> GetCourse(int pageId = 1, string filter = "", string gettype = "all",
+            string orderByType = "Date", int startpric = 0, int endpric = 0, List<int> selecteedgroup = null, int Tack = 0)
+        {
+            if (Tack == 0)
+                Tack = 8;
+            
+                IQueryable<Course> result = _context.Courses;
+                if (!string.IsNullOrEmpty(filter))
+                {
+                    result = result.Where(c => c.CourseTitle.Contains(filter));
+                }
+                switch (gettype)
+                {
+                    case "all":
+                        break;
+                    case "buy":
+                        {
+                            result = result.Where(c => c.CoursePrice != 0);
+                            break;
+                        }
+                    case "free":
+                        {
+                            result = result.Where(c => c.CoursePrice == 0);
+                            break;
+                        }
+
+                }
+
+                switch (orderByType)
+                {
+                    case "Date":
+                        {
+                            result = result.OrderByDescending(c => c.CreateDate);
+
+                            break;
+                        }
+
+                    case "UpdateDate":
+                        {
+                            result = result.OrderByDescending(c => c.UpdateDate);
+                            break;
+                        }
+                }
+                if (startpric > 0)
+                {
+                    result = result.Where(c => c.CoursePrice > startpric);
+                }
+                if (endpric > 0)
+                {
+                    result = result.Where(c => c.CoursePrice > endpric);
+                }
+                if (selecteedgroup != null && selecteedgroup.Any())
+                {
+                    //TOdo
+                }
+                int skip = (pageId - 1) * Tack;
+                return result.Include(c=>c.CourseEpisodes).Select(c=> new ShowCourseListViewModel()
+                {
+                    CoursId = c.CourseId,
+                    ImageName=c.CourseImageName,
+                    Price=c.CoursePrice,
+                    Title=c.CourseTitle,
+                    TotalTime=new TimeSpan(c.CourseEpisodes.Sum(e=>e.EpisodeTime.Ticks)),
+                }).ToList();
+              
+        }
     }
 }
